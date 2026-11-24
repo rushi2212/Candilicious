@@ -1,0 +1,4 @@
+import mongoose from 'mongoose';
+const addressSchema=new mongoose.Schema({label:{type:String,trim:true,maxLength:40,default:'Home'},name:{type:String,trim:true,maxLength:100,default:''},phone:{type:String,trim:true,maxLength:30,default:''},line1:{type:String,required:true,trim:true,maxLength:200},line2:{type:String,trim:true,maxLength:200,default:''},city:{type:String,required:true,trim:true,maxLength:100},state:{type:String,required:true,trim:true,maxLength:100},pincode:{type:String,required:true,trim:true,maxLength:12},isDefault:{type:Boolean,default:false}});
+const schema=new mongoose.Schema({name:{type:String,required:true,trim:true,maxLength:100},email:{type:String,required:true,unique:true,lowercase:true,trim:true},password:{type:String,required:true,select:false},role:{type:String,enum:['customer','admin'],default:'customer'},addresses:{type:[addressSchema],default:[]}},{timestamps:true});
+export default mongoose.model('User',schema);

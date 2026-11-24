@@ -1,0 +1,2 @@
+import {Router} from 'express';import {z} from 'zod';import Newsletter from '../models/Newsletter.js';
+const r=Router();r.post('/',async(req,res,next)=>{try{const {email}=z.object({email:z.string().email().max(254)}).parse(req.body);await Newsletter.updateOne({email:email.toLowerCase()},{email:email.toLowerCase(),isActive:true,consentedAt:new Date()},{upsert:true});res.status(201).json({message:'Thank you for subscribing.'})}catch(e){next(e)}});export default r;

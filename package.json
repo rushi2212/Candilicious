@@ -1,0 +1,16 @@
+{
+  "name": "candilicious",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": ["client", "server"],
+  "scripts": {
+    "dev": "concurrently -k \"npm run dev --workspace server\" \"npm run dev --workspace client\"",
+    "dev:client": "npm run dev --workspace client",
+    "dev:server": "npm run dev --workspace server",
+    "build": "npm run build --workspace client",
+    "start": "npm run start --workspace server",
+    "seed": "npm run seed --workspace server"
+  },
+  "dependencies": { "rollup": "npm:@rollup/wasm-node@4.68.8" },
+  "devDependencies": { "concurrently": "^9.1.2" }
+}

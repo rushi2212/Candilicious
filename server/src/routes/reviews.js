@@ -1,0 +1,15 @@
+import {Router} from 'express';
+import {z} from 'zod';
+import mongoose from 'mongoose';
+import Product from '../models/Product.js';
+import Order from '../models/Order.js';
+import Review from '../models/Review.js';
+import {auth,admin} from '../middleware/auth.js';
+const r=Router();
+const reviewSchema=z.object({rating:z.coerce.number().int().min(1).max(5),title:z.string().trim().max(100).optional().default(''),body:z.string().trim().min(10).max(2000),imageUrl:z.union([z.string().url().max(1000),z.literal('')]).optional().default('')});
+r.get('/product/:productId',async(req,res,next)=>{try{if(!mongoose.isValidObjectId(req.params.productId))return res.status(400).json({message:'Invalid product'});const items=await Review.find({product:req.params.productId,approved:true}).sort({createdAt:-1}).limit(100).lean();res.json({reviews:items,average:items.length?items.reduce((s,x)=>s+x.rating,0)/items.length:0,count:items.length})}catch(e){next(e)}});
+r.post('/product/:productId',auth,async(req,res,next)=>{try{const product=await Product.findOne({_id:req.params.productId,isActive:true});if(!product)return res.status(404).json({message:'Product not found'});const email=req.user.email.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');const order=await Order.findOne({'customer.email':{$regex:`^${email}$`,$options:'i'},'products.product':product._id,orderStatus:{$ne:'Cancelled'}}).sort({createdAt:-1});if(!order)return res.status(403).json({message:'Only customers who purchased this candle can review it'});const data=reviewSchema.parse(req.body);const review=await Review.create({product:product._id,user:req.user._id,order:order._id,customerName:req.user.name,rating:data.rating,title:data.title,body:data.body,imageUrl:data.imageUrl});res.status(201).json({message:'Review submitted for moderation',review})}catch(e){next(e)}});
+r.get('/admin/all',auth,admin,async(_req,res,next)=>{try{res.json(await Review.find().populate('product','name').sort({createdAt:-1}).limit(500))}catch(e){next(e)}});
+r.patch('/admin/:id',auth,admin,async(req,res,next)=>{try{const approved=z.object({approved:z.boolean()}).parse(req.body).approved;const review=await Review.findByIdAndUpdate(req.params.id,{approved},{new:true,runValidators:true});if(!review)return res.status(404).json({message:'Review not found'});res.json(review)}catch(e){next(e)}});
+r.delete('/admin/:id',auth,admin,async(req,res,next)=>{try{const review=await Review.findByIdAndDelete(req.params.id);if(!review)return res.status(404).json({message:'Review not found'});res.json({ok:true})}catch(e){next(e)}});
+export default r;

@@ -1,0 +1,2 @@
+import {Router} from 'express';import {z} from 'zod';import Contact from '../models/Contact.js';
+const r=Router();r.post('/',async(req,res,next)=>{try{const data=z.object({name:z.string().trim().min(2).max(100),email:z.string().email(),phone:z.string().max(30).optional().default(''),message:z.string().trim().min(10).max(3000)}).parse(req.body);await Contact.create(data);res.status(201).json({message:'Thank you for your note. We’ll be in touch soon.'})}catch(e){next(e)}});export default r;
