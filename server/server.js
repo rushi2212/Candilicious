@@ -17,7 +17,7 @@ import { errorHandler } from './src/middleware/errors.js';
 
 const app=express();
 if(!process.env.JWT_SECRET||process.env.JWT_SECRET.length<32){console.error('Set JWT_SECRET to a random value of at least 32 characters in server/.env');process.exit(1)}
-app.use(helmet());
+app.use(helmet({contentSecurityPolicy:{directives:{imgSrc:["'self'","data:","https:"]}}}));
 app.use(cors({origin:process.env.CLIENT_ORIGIN?.split(',')||'http://localhost:5173'}));
 app.use(express.json({limit:'1mb'}));
 app.use('/api/auth',rateLimit({windowMs:15*60*1000,max:30}),authRoutes);
