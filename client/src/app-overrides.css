@@ -148,3 +148,49 @@ input,select,textarea{max-width:100%}
   .footer-main{gap:24px 12px}
   .footer-main>div{min-width:0}
 }
+
+
+/* Customer account dashboard: tablet and phone layouts */
+@media (max-width: 900px){
+  .account-page{padding:34px 5% 56px}
+  .account-layout{grid-template-columns:minmax(0,1fr);gap:14px;min-width:0}
+  .account-menu{padding:9px;display:flex;align-items:center;gap:4px;overflow-x:auto;overscroll-behavior-x:contain;white-space:nowrap;-webkit-overflow-scrolling:touch}
+  .account-identity{display:none}
+  .account-menu>button{flex:0 0 auto;width:auto;padding:11px 10px;gap:7px;font-size:10px}
+  .account-menu>button svg:last-child{display:none}
+  .account-menu>button.account-logout{margin:0 0 0 auto;border:0}
+  .account-content{min-width:0;width:100%;padding:clamp(16px,3vw,26px);overflow:hidden}
+  .account-content .table-wrap{width:100%;max-width:100%;overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+  .account-content table{min-width:620px}
+  .account-tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .account-tiles button{min-width:0;grid-template-columns:28px minmax(0,1fr)}
+  .address-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width: 560px){
+  .account-page{padding:26px 4% 44px}
+  .account-heading{align-items:stretch;gap:14px;margin-bottom:20px}
+  .account-heading h1{font-size:clamp(30px,9vw,38px)}
+  .account-heading>.button{width:100%;justify-content:center}
+  .account-menu{margin-inline:-1px}
+  .account-menu>button{padding:10px 9px;font-size:9px}
+  .account-menu>button svg:first-child{width:15px;height:15px}
+  .account-content{padding:17px 12px;min-height:0}
+  .account-content h2{font-size:22px;line-height:1.2;margin-bottom:17px}
+  .account-tiles{gap:8px;margin:16px 0 24px}
+  .account-tiles button{padding:13px 10px}
+  .account-tiles b{font-size:21px}
+  .account-tiles span{font-size:9px}
+  .account-section-head{gap:8px;flex-wrap:wrap}
+  .account-section-head h3{font-size:18px}
+  .account-section-head button{font-size:10px}
+  .account-empty{padding:24px 12px}
+  .address-grid{grid-template-columns:minmax(0,1fr)}
+  .customer-order-card{min-width:0;overflow-wrap:anywhere}
+  .profile-card{padding:15px}
+}
+@media (max-width: 360px){
+  .account-menu{gap:1px;padding:7px}
+  .account-menu>button{padding:9px 7px;gap:5px}
+  .account-tiles button{grid-template-columns:22px minmax(0,1fr);padding:11px 8px}
+  .account-tiles button svg{width:18px;height:18px}
+}
